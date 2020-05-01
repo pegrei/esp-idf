@@ -51,6 +51,7 @@ key_description = miniterm.key_description
 # Control-key characters
 CTRL_A = '\x01'
 CTRL_B = '\x02'
+CTRL_E = '\x05'
 CTRL_F = '\x06'
 CTRL_H = '\x08'
 CTRL_R = '\x12'
@@ -175,8 +176,9 @@ class ConsoleReader(StoppableThread):
             #
             # note that TIOCSTI is not implemented in WSL / bash-on-Windows.
             # TODO: introduce some workaround to make it work there.
-            import fcntl, termios
-            fcntl.ioctl(self.console.fd, termios.TIOCSTI, b'\0')
+            #import fcntl, termios
+            #fcntl.ioctl(self.console.fd, termios.TIOCSTI, b'\0')
+            print('Closing monitor.')
 
 class SerialReader(StoppableThread):
     """ Read serial data from the serial port and push to the
@@ -300,7 +302,7 @@ class Monitor(object):
         self.make = make
         self.toolchain_prefix = toolchain_prefix
         self.menu_key = CTRL_T
-        self.exit_key = CTRL_RBRACKET
+        self.exit_key = CTRL_E
 
         self.translate_eol = {
             "CRLF": lambda c: c.replace(b"\n", b"\r\n"),
